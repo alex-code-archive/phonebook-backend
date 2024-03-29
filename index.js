@@ -25,6 +25,18 @@ let persons = [
 	}
 ]
 
+function errorCheck(body, res) {
+	if (!body.name || !body.number) {
+		return { error: 'User name or number is blank.' }
+	} else if (
+		persons.find(
+			(person) => person.name.toLowerCase() === body.name.toLowerCase()
+		)
+	) {
+		return { error: 'Name must be unique.' }
+	}
+}
+
 app.delete('/api/persons/:id', (req, res) => {
 	const id = Number(req.params.id)
 	persons = persons.filter((person) => person.id !== id)
@@ -53,9 +65,11 @@ app.get('/info', (req, res) => {
 
 app.post('/api/persons', (req, res) => {
 	const body = req.body
-	console.log(body)
-	if (!body.name) {
-		return res.status(400).json({ error: 'content missing' })
+	const error = errorCheck(body, res)
+
+	if (error) {
+		res.status(400).json(error)
+		return
 	}
 	const person = {
 		id: Math.floor(Math.random() * 999999999),
