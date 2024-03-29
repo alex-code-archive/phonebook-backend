@@ -1,11 +1,19 @@
 {
-  "name": "phonebook",
-  "version": "1.0.0",
-  "description": "A simple phonebook.",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "Alex Hewitt",
-  "license": "MIT"
+	"name": "phonebook",
+	"version": "1.0.0",
+	"description": "A simple phonebook.",
+	"main": "index.js",
+	"scripts": {
+		"start": "node index.js",
+		"dev": "nodemon index.js",
+		"test": "echo \"Error: No test specified\" && exit 1"
+	},
+	"author": "Alex Hewitt",
+	"license": "MIT",
+	"devDependencies": {
+		"nodemon": "^3.1.0"
+	},
+	"dependencies": {
+		"express": "^4.19.2"
+	}
 }
