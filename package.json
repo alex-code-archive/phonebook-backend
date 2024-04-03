@@ -1,20 +1,22 @@
 {
-	"name": "phonebook",
-	"version": "1.0.0",
-	"description": "A simple phonebook.",
-	"main": "index.js",
-	"scripts": {
-		"start": "node index.js",
-		"dev": "nodemon index.js",
-		"test": "echo \"Error: No test specified\" && exit 1"
-	},
-	"author": "Alex Hewitt",
-	"license": "MIT",
-	"devDependencies": {
-		"nodemon": "^3.1.0"
-	},
-	"dependencies": {
-		"express": "^4.19.2",
-		"morgan": "^1.10.0"
-	}
+    "name": "phonebook",
+    "version": "1.0.0",
+    "description": "A simple phonebook.",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js",
+        "dev": "nodemon index.js",
+        "test": "echo \"Error: No test specified\" && exit 1",
+        "build:ui": "rm -rf dist && cd ../phonebook-frontend && npm run build && cp -r dist ../phonebook-backend",
+        "deploy:full": "npm run build:ui && git add . && git commit -m uibuild && git push"
+    },
+    "author": "Alex Hewitt",
+    "license": "MIT",
+    "devDependencies": {
+        "nodemon": "^3.1.0"
+    },
+    "dependencies": {
+        "express": "^4.19.2",
+        "morgan": "^1.10.0"
+    }
 }
