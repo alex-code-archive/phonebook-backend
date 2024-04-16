@@ -42,9 +42,3 @@ person.save().then((result) => {
 	console.log(`Added ${name} with number ${number} to phonebook.`)
 	mongoose.connection.close()
 })
-// Note.find({}).then((result) => {
-// 	result.forEach((note) => {
-// 		console.log(note)
-// 	})
-// 	mongoose.connection.close()
-// })
