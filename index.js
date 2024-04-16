@@ -21,14 +21,8 @@ const unknownEndpoint = (request, response) => {
 }
 
 function errorCheck(body, res) {
-	if (!body.name || !body.number) {
+	if (!body.name || !body.phoneNumber) {
 		return { error: 'User name or number is blank.' }
-	} else if (
-		persons.find(
-			(person) => person.name.toLowerCase() === body.name.toLowerCase()
-		)
-	) {
-		return { error: 'Name must be unique.' }
 	}
 }
 
@@ -66,13 +60,13 @@ app.post('/api/persons', (req, res) => {
 		res.status(400).json(error)
 		return
 	}
-	const person = {
-		id: Math.floor(Math.random() * 999999999),
+	const person = new Phonebook({
 		name: body.name,
-		number: body.number
-	}
-	persons = persons.concat(person)
-	res.json(person)
+		phoneNumber: body.phoneNumber
+	})
+	person.save().then((savedPerson) => {
+		res.json(person)
+	})
 })
 
 app.use(unknownEndpoint)
