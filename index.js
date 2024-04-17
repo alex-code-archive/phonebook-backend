@@ -11,66 +11,68 @@ app.use(cors())
 app.use(express.static('dist'))
 morgan.token('data', (req, res) => JSON.stringify(req.body))
 app.use(
-	morgan(
-		`:method :url :status :res[content-length] - :response-time ms :data`
-	)
+    morgan(
+        `:method :url :status :res[content-length] - :response-time ms :data`
+    )
 )
 
 const unknownEndpoint = (request, response) => {
-	response.status(404).send({ error: 'unknown endpoint' })
+    response.status(404).send({ error: 'unknown endpoint' })
 }
 
 function errorCheck(body, res) {
-	if (!body.name || !body.phoneNumber) {
-		return { error: 'User name or number is blank.' }
-	}
+    if (!body.name || !body.phoneNumber) {
+        return { error: 'User name or number is blank.' }
+    }
 }
 
 app.delete('/api/persons/:id', (req, res) => {
-	const id = Number(req.params.id)
-	persons = persons.filter((person) => person.id !== id)
-	res.status(204).end()
+    Phonebook.findByIdAndDelete(req.params.id)
+        .then((result) => {
+            res.status(204).end()
+        })
+        .catch((error) => next(error))
 })
 
 app.get('/api/persons', (req, res) => {
-	Phonebook.find({}).then((phonebook) => {
-		res.json(phonebook)
-	})
+    Phonebook.find({}).then((phonebook) => {
+        res.json(phonebook)
+    })
 })
 
 app.get('/api/persons/:id', (req, res) => {
-	Phonebook.findById(req.params.id).then((person) => {
-		res.json(person)
-	})
+    Phonebook.findById(req.params.id).then((person) => {
+        res.json(person)
+    })
 })
 
 app.get('/info', (req, res) => {
-	Phonebook.countDocuments({}).then((count) => {
-		const info = `<p>Phonebook has info for ${count} people</p><br/>
+    Phonebook.countDocuments({}).then((count) => {
+        const info = `<p>Phonebook has info for ${count} people</p><br/>
         ${new Date()}`
-		res.send(info)
-	})
+        res.send(info)
+    })
 })
 
 app.post('/api/persons', (req, res) => {
-	const body = req.body
-	const error = errorCheck(body, res)
+    const body = req.body
+    const error = errorCheck(body, res)
 
-	if (error) {
-		res.status(400).json(error)
-		return
-	}
-	const person = new Phonebook({
-		name: body.name,
-		phoneNumber: body.phoneNumber
-	})
-	person.save().then((savedPerson) => {
-		res.json(person)
-	})
+    if (error) {
+        res.status(400).json(error)
+        return
+    }
+    const person = new Phonebook({
+        name: body.name,
+        phoneNumber: body.phoneNumber
+    })
+    person.save().then((savedPerson) => {
+        res.json(person)
+    })
 })
 
 app.use(unknownEndpoint)
 const PORT = process.env.PORT
 app.listen(PORT, () => {
-	console.log(`Server running on port ${PORT}`)
+    console.log(`Server running on port ${PORT}`)
 })
