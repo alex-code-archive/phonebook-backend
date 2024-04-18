@@ -5,7 +5,6 @@ const morgan = require('morgan')
 const cors = require('cors')
 const app = express()
 const Phonebook = require('./models/phonebook')
-const phonebook = require('./models/phonebook')
 
 app.use(express.json())
 app.use(cors())
