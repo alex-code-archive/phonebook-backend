@@ -1,0 +1,18 @@
+meta {
+  name: update-person
+  type: http
+  seq: 8
+}
+
+put {
+  url: http://localhost:3001/api/persons/66105d68ecc8524b452aa38f
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "Dan Smith",
+    "phoneNumber": "444-444-4444"
+  }
+}

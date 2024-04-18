@@ -5,6 +5,7 @@ const morgan = require('morgan')
 const cors = require('cors')
 const app = express()
 const Phonebook = require('./models/phonebook')
+const phonebook = require('./models/phonebook')
 
 app.use(express.json())
 app.use(cors())
@@ -73,6 +74,27 @@ app.post('/api/persons', (req, res) => {
 	person.save().then((savedPerson) => {
 		res.json(person)
 	})
+})
+
+app.put('/api/persons/:id', (req, res) => {
+	const body = req.body
+	const error = errorCheck(body, res)
+
+	if (error) {
+		res.status(400).json(error)
+		return
+	}
+
+	const updatedPerson = {
+		name: body.name,
+		phoneNumber: body.phoneNumber
+	}
+
+	Phonebook.findByIdAndUpdate(req.params.id, updatedPerson, { new: true })
+		.then((updatedPerson) => {
+			res.json(updatedPerson)
+		})
+		.catch((error) => next(error))
 })
 
 function errorHandler(error, request, response, next) {
