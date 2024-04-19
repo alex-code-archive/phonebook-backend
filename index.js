@@ -58,7 +58,7 @@ app.get('/info', (req, res) => {
 		.catch((error) => next(error))
 })
 
-app.post('/api/persons', (req, res) => {
+app.post('/api/persons', (req, res, next) => {
 	const body = req.body
 	const error = errorCheck(body, res)
 
@@ -70,9 +70,12 @@ app.post('/api/persons', (req, res) => {
 		name: body.name,
 		phoneNumber: body.phoneNumber
 	})
-	person.save().then((savedPerson) => {
-		res.json(person)
-	})
+	person
+		.save()
+		.then((savedPerson) => {
+			res.json(savedPerson)
+		})
+		.catch((error) => next(error))
 })
 
 app.put('/api/persons/:id', (req, res) => {
@@ -101,11 +104,17 @@ function errorHandler(error, request, response, next) {
 
 	if (error.name === 'CastError') {
 		return response.status(400).send({ error: 'malformatted id' })
+	} else if (error.name === 'ValidationError') {
+		return response
+			.status(400)
+			.send({ error: 'Name must be at least three characters.' })
 	}
 	next(error)
 }
 
 app.use(unknownEndpoint)
+app.use(errorHandler)
+
 const PORT = process.env.PORT
 app.listen(PORT, () => {
 	console.log(`Server running on port ${PORT}`)
