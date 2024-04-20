@@ -100,14 +100,10 @@ app.put('/api/persons/:id', (req, res) => {
 })
 
 function errorHandler(error, request, response, next) {
-	console.log(error.message)
-
 	if (error.name === 'CastError') {
 		return response.status(400).send({ error: 'malformatted id' })
 	} else if (error.name === 'ValidationError') {
-		return response
-			.status(400)
-			.send({ error: 'Name must be at least three characters.' })
+		return response.status(400).send({ error: error.message })
 	}
 	next(error)
 }
